@@ -8,30 +8,51 @@
 
 import UIKit
 import CoreData
-
+import Flutter
+import flutter_boost
+// Used to connect plugins (only if you have plugins with iOS platform code).
+import FlutterPluginRegistrant
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
+    var flutterEngine : FlutterEngine?;
+    var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        self.flutterEngine = FlutterEngine(name: "io.flutter", project: nil);
+                      
+        self.flutterEngine?.run(withEntrypoint: nil);
+                      
+        GeneratedPluginRegistrant.register(with: self.flutterEngine as! FlutterEngine);
+        
+//        PlatformRouterImp *router = [PlatformRouterImp new];
+//         [FlutterBoostPlugin.sharedInstance startFlutterWithPlatform:router
+//                                                             onStart:^(FlutterEngine *engine) {
+//
+//                                                             }];
+//         UITabBarController *tabVC = [[UITabBarController alloc] init];
+//         UINavigationController *rvc = [[UINavigationController alloc] initWithRootViewController:tabVC];
+//         router.navigationController = rvc;
+        let router = PlatformRouterImp.init()
+        FlutterBoostPlugin.sharedInstance().startFlutter(with: router) { (engine) in
+            print("engine",engine)
+        }
+        
+        
+//        let controller : FlutterViewController = window?.rootViewController as! FlutterViewController;
+//        let batteryChannel = FlutterMethodChannel.init(name: "samples.flutter.io/battery",
+//                                                       binaryMessenger: controller);
+//        batteryChannel.setMethodCallHandler({
+//          (call: FlutterMethodCall, result: FlutterResult) -> Void in
+//          // Handle battery messages.
+//        });
+
+//           GeneratedPluginRegistrant.register(with: self)
+        
         return true
     }
 
-    // MARK: UISceneSession Lifecycle
-
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        // Called when a new scene session is being created.
-        // Use this method to select a configuration to create the new scene with.
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
-    }
-
-    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
-    }
 
     // MARK: - Core Data stack
 
